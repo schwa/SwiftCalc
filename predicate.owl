@@ -1,0 +1,55 @@
+#using owl.v4
+expression =
+    identifier : variable
+    number : number
+    string : string
+    integer : integer
+    '$' identifier : local # TODO: This allows "$ bar"
+    'true' : true
+    'false' : false
+
+  .operators prefix
+    '-' : negate
+    '!' | 'not' : not
+  .operators infix left
+    '*' : multiply
+    '/' : divide
+  .operators infix left
+    '+' : add
+    '-' : subtract
+  .operators infix left
+    '!=' | '<>' : not-equals
+    '=' | '==' : equals
+    '>' : greater-than
+    '>=' : greater-than-or-equal
+    '<' : less-than
+    '<=' : less-than-or-equal
+  .operators infix left
+    '&&' | 'and' : and
+    '||' | 'or' : or
+
+  .operators infix left
+    'contains' modifier? : contains
+    'beginswith' modifier? : begins-with
+    'endswith' modifier? : ends-with
+    'like' modifier? : like
+    'matches' modifier? : matches
+
+   .operators prefix left
+    'any' : any
+    'some' : some
+    'all' : all
+    'none' : none
+
+  .operators postfix
+    [ '(' expression{','} ')' ] : call
+  .operators postfix
+    'between' range_ : between
+    '.' identifier : field
+
+flags =
+  'c' | 'd' | 'cd' : flags
+modifier =
+    [ '[' flags ']' ] : modifier
+range_ =
+  [ '{' expression ',' expression '}' ] : range_
