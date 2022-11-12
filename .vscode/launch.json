@@ -1,0 +1,58 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug math",
+            "program": "${workspaceFolder:SwiftCalc}/.build/debug/math",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftCalc}",
+            "preLaunchTask": "swift: Build Debug math"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Release math",
+            "program": "${workspaceFolder:SwiftCalc}/.build/release/math",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftCalc}",
+            "preLaunchTask": "swift: Build Release math"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug SwiftCalc",
+            "program": "${workspaceFolder:SwiftCalc}/.build/debug/SwiftCalc",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftCalc}",
+            "preLaunchTask": "swift: Build Debug SwiftCalc"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Release SwiftCalc",
+            "program": "${workspaceFolder:SwiftCalc}/.build/release/SwiftCalc",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftCalc}",
+            "preLaunchTask": "swift: Build Release SwiftCalc"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug CLI",
+            "program": "${workspaceFolder:SwiftCalc}/.build/debug/CLI",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftCalc}",
+            "preLaunchTask": "swift: Build Debug CLI"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Release CLI",
+            "program": "${workspaceFolder:SwiftCalc}/.build/release/CLI",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftCalc}",
+            "preLaunchTask": "swift: Build Release CLI"
+        }
+    ]
+}

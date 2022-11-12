@@ -1,0 +1,15 @@
+#using owl.v4
+expression =
+    identifier : variable
+    number : number
+    [ '(' expression ')' ] : parens
+  .operators postfix
+    [ '(' expression{','} ')' ] : call
+  .operators prefix
+    '-' : negate
+  .operators infix left
+    '*' : multiply
+    '/' : divide
+  .operators infix left
+    '+' : add
+    '-' : subtract
