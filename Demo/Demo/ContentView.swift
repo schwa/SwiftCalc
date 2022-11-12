@@ -6,25 +6,25 @@ struct ContentView: View {
     var expression: String = ""
 
     @State
-    var result: Result<(Value, Node), Error>?
+    var result: Result<(Value, CompiledProgram), Error>?
 
     var body: some View {
         HStack {
             Form {
                 TextField("Expression", text: $expression)
-                LabeledContent("Result") {
-                    switch result {
-                    case .none:
-                        Text("")
-                    case .success((let value, let node)):
-                        if case let .number(value) = value {
-                            Text(String(describing: value))
-                        } else {
-                            Text("Not a number")
-                        }
-                    case .failure(let error):
-                        Text(String(describing: error))
+                switch result {
+                case .none:
+                    Text("")
+                case .success((let value, let program)):
+                    if case let .number(value) = value {
+                        Text(String(describing: value))
+                    } else {
+                        Text("Not a number")
                     }
+                    Text(AttributedString(program: program))
+
+                case .failure(let error):
+                    Text(String(describing: error))
                 }
             }
         }
@@ -34,14 +34,14 @@ struct ContentView: View {
         .padding()
     }
 
-    static func parse(expression: String) -> Result<(Value, Node), Error> {
+    static func parse(expression: String) -> Result<(Value, CompiledProgram), Error> {
         let variables: [String: Value] = Dictionary(uniqueKeysWithValues: Math.all.map { ($0.id, .function($0)) })
 
         do {
             let program = try Compiler().compile(expression)
             let executor = Executor(variables: variables)
             let value = try executor.execute(program)
-            return .success((value, program.root))
+            return .success((value, program))
         } catch {
             return .failure(error)
         }

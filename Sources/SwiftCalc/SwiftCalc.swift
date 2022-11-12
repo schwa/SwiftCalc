@@ -276,7 +276,7 @@ public struct Executor {
 
 internal extension String {
     func range(_ r: source_range) -> Range<Index> {
-        index(utf8.startIndex, offsetBy: r.start) ..< utf8.index(utf8.startIndex, offsetBy: r.end)
+        index(startIndex, offsetBy: r.start) ..< index(startIndex, offsetBy: r.end)
     }
 
     subscript(r: source_range) -> String {
