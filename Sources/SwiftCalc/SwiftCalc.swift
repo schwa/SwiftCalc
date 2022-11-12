@@ -27,8 +27,10 @@ public enum ParseError: Error {
 }
 
 public enum ExecutionError: Error {
-    case unknown
+    case unknownError
     case unknownVariable(String)
+    case parameterError
+    case typeMismatch
 }
 
 public enum Value {
@@ -81,8 +83,6 @@ public struct Node {
     public let location: Location?
     public let atom: Atom
 }
-
-
 
 public indirect enum Atom {
     case value(Value)
@@ -217,14 +217,14 @@ public struct Executor {
             case (.number(let left), .number(let right)):
                 return .number(left + right)
             default:
-                throw ExecutionError.unknown
+                throw ExecutionError.typeMismatch
             }
         case .minus(let left, let right):
             switch (try resolve(evaluate(left)), try resolve(evaluate(right))) {
             case (.number(let left), .number(let right)):
                 return .number(left - right)
             default:
-                throw ExecutionError.unknown
+                throw ExecutionError.typeMismatch
             }
         case .times(let left, let right):
             let (left, right) = (try resolve(evaluate(left)), try resolve(evaluate(right)))
@@ -232,21 +232,21 @@ public struct Executor {
             case (.number(let left), .number(let right)):
                 return .number(left * right)
             default:
-                throw ExecutionError.unknown
+                throw ExecutionError.typeMismatch
             }
         case .negate(let value):
             switch try resolve(evaluate(value)) {
             case .number(let value):
                 return .number(-value)
             default:
-                throw ExecutionError.unknown
+                throw ExecutionError.typeMismatch
             }
         case .divide(let left, let right):
             switch (try resolve(evaluate(left)), try resolve(evaluate(right))) {
             case (.number(let left), .number(let right)):
                 return .number(left / right)
             default:
-                throw ExecutionError.unknown
+                throw ExecutionError.typeMismatch
             }
         case .call(let callee, let parameters):
             switch try resolve(evaluate(callee)) {
@@ -254,7 +254,7 @@ public struct Executor {
                 let parameters = try parameters.map { try resolve(evaluate($0)) }
                 return try function(parameters)
             default:
-                throw ExecutionError.unknown
+                throw ExecutionError.typeMismatch
             }
         }
     }
