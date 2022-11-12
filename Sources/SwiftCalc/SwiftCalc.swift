@@ -32,18 +32,32 @@ public enum ExecutionError: Error {
 }
 
 public enum Value {
-    case function(([Value]) throws -> Value)
+    case function(Function)
     case number(Double)
     case integer(Int)
     case string(String)
     case variable(String)
 }
 
+public struct Function: Identifiable {
+    public let id: String
+    public let closure: ([Value]) throws -> Value
+
+    public func callAsFunction(_ parameters: [Value]) throws -> Value {
+        return try closure(parameters)
+    }
+
+    public init(_ id: String, _ closure: @escaping ([Value]) throws -> Value) {
+        self.id = id
+        self.closure = closure
+    }
+}
+
 extension Value: Equatable {
     public static func == (lhs: Value, rhs: Value) -> Bool {
         switch (lhs, rhs) {
-        case (.function, .function):
-            fatalError()
+        case (.function(let lhs), .function(let rhs)):
+            return lhs.id == rhs.id
         case (.number(let lhs), .number(let rhs)):
             return lhs == rhs
         case (.integer(let lhs), .integer(let rhs)):
@@ -68,45 +82,7 @@ public struct Node {
     public let atom: Atom
 }
 
-public extension Atom {
-    var s: String? {
-        switch self {
-        case .value(let value):
-            return String(describing: value)
-        case .plus:
-            return "operator +"
-        case .minus:
-            return "operator -"
-        case .times:
-            return "operator *"
-        case .negate:
-            return "operator unary -"
-        case .divide:
-            return "operator /"
-        case .call:
-            return "function"
-        }
-    }
 
-    var children: [Node]? {
-        switch self {
-        case .value:
-            return nil
-        case .plus(let left, let right):
-            return [left, right]
-        case .minus(let left, let right):
-            return [left, right]
-        case .times(let left, let right):
-            return [left, right]
-        case .negate(let left):
-            return [left]
-        case .divide(let left, let right):
-            return [left, right]
-        case .call(let name, let parameters):
-            return [name] + parameters
-        }
-    }
-}
 
 public indirect enum Atom {
     case value(Value)

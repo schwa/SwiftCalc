@@ -16,7 +16,6 @@ let package = Package(
     targets: [
         .target(name: "parser"),
         .target(name: "SwiftCalc", dependencies: ["parser"]),
-        .executableTarget(name: "CLI", dependencies: ["SwiftCalc"]),
         .testTarget(name: "SwiftCalcTests", dependencies: ["SwiftCalc"]),
     ]
 )

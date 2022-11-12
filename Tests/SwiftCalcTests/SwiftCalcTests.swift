@@ -2,11 +2,10 @@ import SwiftCalc
 import XCTest
 
 final class SwiftCalcTests: XCTestCase {
-
     func test1() throws {
         let variables: [String: Value] = [
             "pi": .number(.pi),
-            "sin": .function(sin),
+            "sin": .function(Math.sin),
         ]
         let program = try Compiler().compile("sin(1) * 10 * pi")
         // program.dump()
@@ -17,12 +16,4 @@ final class SwiftCalcTests: XCTestCase {
         }
         XCTAssertEqual(resultValue, sin(1) * 10 * .pi)
     }
-
-}
-
-func sin(_ parameters: [Value]) -> Value {
-    guard parameters.count == 1, let p0 = parameters.first, case .number(let value) = p0 else {
-        fatalError()
-    }
-    return .number(Darwin.sin(value))
 }
