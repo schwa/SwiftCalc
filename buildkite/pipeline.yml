@@ -2,5 +2,5 @@ steps:
     - commands:
           - "swift package clean"
           - "swift build"
-          - "swift test --enable-code-coverage"
+          - "swift test"
           - "swiftlint lint --quiet"
